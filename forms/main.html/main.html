@@ -1,0 +1,96 @@
+<html>
+	<head>
+		<link type="text/css" rel="stylesheet" href="/style-guide/css/fluig-style-guide.min.css"/>
+		<script type="text/javascript" src="/portal/resources/js/jquery/jquery.js"></script>
+		<script type="text/javascript" src="/portal/resources/js/jquery/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="/portal/resources/js/mustache/mustache-min.js"></script>
+		<script type="text/javascript" src="/style-guide/js/fluig-style-guide.min.js" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="fluig-style-guide">
+			<form name="form" role="form">
+				<div class="panel panel-primary" id="pn_distrato">
+					<div class="panel-heading">
+						<h3 class="panel-title"><span class="fluigicon fluigicon-test-refresh icon-md"></span> Distrato</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row form-group">
+							<div class="col-md-2">
+								<label for="numVenda" class="control-label">Venda</label>
+								<input type=text" class="form-control" id="numVenda" name="numVenda" required="required">
+							</div>
+						</div>
+						<div class="row form-group">
+							<table tablename="tblVenda" clas="table table-hover">
+								<thead>
+									<tr></tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>
+											<label for="pfVenda" class="control-label">Venda</label>
+											<input type=text" class="form-control" id="pfVenda" name="pfVenda" required="required">
+										</td>
+										<td>
+											<label for="pfIdlan" class="control-label">Venda</label>
+											<input type=text" class="form-control" id="pfIdlan" name="pfIdlan" required="required">
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<button type="button" id="btnDesistencia" class="btn btn-default" onclick="getDataset()">Salvar</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</body>
+</html>
+
+<script type="text/javascript" src="/webdesk/vcXMLRPC.js"></script>
+
+<script>
+
+	function customSave() {
+		
+		// SALVAR SOLICITACAO
+		window.parent.$('#workflowActions > ul#optionList > li > a[data-save]').click()
+
+		// TRANSFERIR SOLICITACAO
+		window.parent.$('#workflowActions > ul#optionList > li > a[data-transfer]').click()
+	}
+
+	function getDataset() {
+
+	
+		var dsVenda = DatasetFactory.getDataset('dsTesteVenda', null, null, null)
+
+		for (var i = 0; i < dsVenda.values.length; i++) {
+
+			var rowVenda = wdkAddChild("tblVenda")
+
+			var numVenda = dsVenda.values[i].num_venda
+
+			console.log(numVenda)
+
+			$("#pfVenda___" + rowVenda).val(numVenda)
+
+			var c1 = DatasetFactory.createConstraint("venda", numVenda, numVenda, ConstraintType.MUST)
+			var constraint = new Array(c1)
+
+			var dsSinal = DatasetFactory.getDataset("dsTesteSinal", null, constraint, null)
+
+
+			for (var k = 0; k < dsSinal.values.length; k++) {
+
+				var Sinal = dsSinal.values[k].idlan
+
+				console.log(Sinal)
+
+				$("#pfIdlan___" + rowVenda).val(Sinal)
+			}
+		}
+	}
+
+
+</script>
